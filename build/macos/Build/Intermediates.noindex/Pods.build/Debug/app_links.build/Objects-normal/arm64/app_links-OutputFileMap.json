@@ -1,0 +1,19 @@
+{
+  "" : {
+    "diagnostics" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/app_links-primary.dia",
+    "emit-module-dependencies" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/app_links-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/app_links-primary-emit-module.dia",
+    "pch" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/app_links-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/app_links-primary.swiftdeps"
+  },
+  "/Users/jun/.pub-cache/hosted/pub.dev/app_links-6.4.1/macos/app_links/Sources/app_links/AppLinksMacosPlugin.swift" : {
+    "const-values" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/AppLinksMacosPlugin.swiftconstvalues",
+    "dependencies" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/AppLinksMacosPlugin.d",
+    "diagnostics" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/AppLinksMacosPlugin.dia",
+    "index-unit-output-path" : "/Pods.build/Debug/app_links.build/Objects-normal/arm64/AppLinksMacosPlugin.o",
+    "llvm-bc" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/AppLinksMacosPlugin.bc",
+    "object" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/AppLinksMacosPlugin.o",
+    "swift-dependencies" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/AppLinksMacosPlugin.swiftdeps",
+    "swiftmodule" : "/Users/jun/my_app/build/macos/Build/Intermediates.noindex/Pods.build/Debug/app_links.build/Objects-normal/arm64/AppLinksMacosPlugin~partial.swiftmodule"
+  }
+}
