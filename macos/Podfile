@@ -1,4 +1,3 @@
-# macOS 배포 타겟 설정
 platform :osx, '10.15'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.

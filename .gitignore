@@ -1,1 +1,32 @@
-404: Not Found
+# Flutter
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.fvm/
+build/
+
+# iOS
+ios/Pods/
+ios/Flutter/Flutter.podspec
+ios/build/
+ios/.symlinks/
+ios/ModuleCache.noindex/
+
+# macOS
+macos/Pods/
+macos/Flutter/ephemeral/
+macos/build/
+macos/ModuleCache.noindex/
+
+# Xcode
+DerivedData/
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata/
+
+# Android Studio / IntelliJ
+.idea/
+
+# Others
+pubspec.lock
