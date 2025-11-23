@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:my_app/core/constants/app_colors.dart';
 import 'package:my_app/shared/styles/text_styles.dart';
 
@@ -13,6 +14,13 @@ class WordPagerPage extends StatelessWidget {
     final now = DateTime.now();
     String two(int n) => n.toString().padLeft(2, '0');
     return '${now.year}${two(now.month)}${two(now.day)}';
+  }
+
+  /// <pink> 태그를 HTML span 으로 바꿔주기
+  String htmlProcessed(String raw) {
+    return raw
+        .replaceAll('<pink>', '<span style="color:#FF5FA2; font-weight:bold;">')
+        .replaceAll('</pink>', '</span>');
   }
 
   @override
@@ -41,7 +49,7 @@ class WordPagerPage extends StatelessWidget {
             if (snapshot.hasError) {
               return Center(
                 child: Text(
-                  '데이터를 불러오지 못했어요 🥲\n${snapshot.error}',
+                  '데이터 불러오기 실패 🥲\n${snapshot.error}',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.body,
                 ),
@@ -52,84 +60,75 @@ class WordPagerPage extends StatelessWidget {
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Center(
                 child: Text(
-                  '오늘의 단어가 아직 등록되지 않았어요.\n($today)',
+                  '오늘의 단어가 아직 없어요.\n($today)',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.bodyMuted,
                 ),
               );
             }
 
+            // 데이터 있음
             final data = snapshot.data!.first;
             final title = data['title'] ?? '제목 없음';
             final description = data['description'] ?? '';
             final imageUrl = data['image_url'];
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 24),
+            final htmlBody = htmlProcessed(description);
 
-                /// 🔵 제목
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+
+                // 🔥 제목 (중앙 정렬)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
                     title,
-                    style: AppTextStyles.title, // 네가 쓰는 큰 제목 스타일에 맞춰 수정해도 됨
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.title.copyWith(fontSize: 32),
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
-                /// 🔵 설명 (스크롤)
+                // 🔥 본문 HTML
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(description, style: AppTextStyles.body),
+                    child: Html(
+                      data: htmlBody,
+                      style: {
+                        "body": Style(
+                          color: AppColors.textPrimary,
+                          fontSize: FontSize(18),
+                          lineHeight: const LineHeight(1.6),
+                        ),
+                      },
+                    ),
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
-                /// 🟡 이미지 — 화면 맨 아래 고정 느낌
+                // 🔥 이미지 — 절대 안짤리고, 비율 유지 + 크기 조절
                 if (imageUrl != null && imageUrl.toString().isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: Image.network(
-                        imageUrl,
-                        width: double.infinity,
-                        fit: BoxFit.contain,
-                        loadingBuilder: (context, child, progress) {
-                          if (progress == null) return child;
-                          return const SizedBox(
-                            height: 200,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  )
-                else
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Center(
-                        child: Text('이미지 없음', style: AppTextStyles.bodyMuted),
+                      child: SizedBox(
+                        height: 400, // ✔ 이거만 조절하면 됨. 300~360 추천.
+                        child: Image.network(
+                          imageUrl,
+                          width: double.infinity,
+                          fit: BoxFit.contain, // ✔ 절대 짤리지 않음
+                        ),
                       ),
                     ),
                   ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
               ],
             );
           },

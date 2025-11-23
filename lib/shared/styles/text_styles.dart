@@ -3,14 +3,14 @@ import 'package:my_app/core/constants/app_colors.dart';
 
 class AppTextStyles {
   static const introMain = TextStyle(
-    color: AppColors.primaryBlue,
+    color: AppColors.titleBlue,
     fontSize: 36,
     fontWeight: FontWeight.w600,
     height: 1.3,
   );
 
   static const introSub = TextStyle(
-    color: AppColors.primaryPink,
+    color: AppColors.highlightPink,
     fontSize: 36,
     fontWeight: FontWeight.w600,
     height: 1.3,
