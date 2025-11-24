@@ -86,7 +86,7 @@ class WordPagerPage extends StatelessWidget {
                   child: Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.title.copyWith(fontSize: 32),
+                    style: AppTextStyles.title,
                   ),
                 ),
 
@@ -100,7 +100,7 @@ class WordPagerPage extends StatelessWidget {
                       data: htmlBody,
                       style: {
                         "body": Style(
-                          color: AppColors.textPrimary,
+                          color: AppColors.textcolor01,
                           fontSize: FontSize(18),
                           lineHeight: const LineHeight(1.6),
                         ),

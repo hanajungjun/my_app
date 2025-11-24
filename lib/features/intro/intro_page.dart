@@ -35,7 +35,7 @@ class _IntroPageState extends State<IntroPage> {
               children: [
                 const Text(
                   "나도 예전엔\n오나전 멋진",
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: AppTextStyles.introMain,
                 ),
 
@@ -43,7 +43,7 @@ class _IntroPageState extends State<IntroPage> {
 
                 const Text(
                   "X세대였었지..",
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: AppTextStyles.introSub,
                 ),
 

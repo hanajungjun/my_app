@@ -3,35 +3,35 @@ import 'package:my_app/core/constants/app_colors.dart';
 
 class AppTextStyles {
   static const introMain = TextStyle(
-    color: AppColors.titleBlue,
-    fontSize: 36,
-    fontWeight: FontWeight.w600,
-    height: 1.3,
+    fontFamily: 'Noto Sans',
+    color: AppColors.textcolor02,
+    fontSize: 45,
+    fontWeight: FontWeight.w300,
   );
 
   static const introSub = TextStyle(
-    color: AppColors.highlightPink,
-    fontSize: 36,
+    fontFamily: 'Noto Sans',
+    color: AppColors.textcolor03,
+    fontSize: 45,
     fontWeight: FontWeight.w600,
-    height: 1.3,
   );
 
   static const title = TextStyle(
-    fontSize: 36,
-    fontWeight: FontWeight.bold,
-    color: AppColors.titleBlue,
-    height: 1.3,
+    fontFamily: 'Noto Sans',
+    fontSize: 45,
+    color: AppColors.textcolor02,
+    fontWeight: FontWeight.w600,
   );
 
   static const body = TextStyle(
+    fontFamily: 'Noto Sans',
     fontSize: 16,
-    height: 1.5,
-    color: AppColors.textMain,
+    color: AppColors.textcolor01,
   );
 
   static const bodyMuted = TextStyle(
+    fontFamily: 'Noto Sans',
     fontSize: 14,
-    height: 1.5,
-    color: AppColors.textSub,
+    color: AppColors.textcolor03,
   );
 }
