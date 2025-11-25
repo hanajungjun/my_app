@@ -86,13 +86,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
     try {
       final dateKey = _dateKey(_selectedDate);
 
-      // 1) 🔥 Storage 업로드 (고유 파일명 생성됨)
+      // 🔥 고유 파일명으로 Storage 업로드
       final imageUrl = await storageService.uploadImage(
-        dateKey: dateKey, // <= 여기가 핵심!
+        dateKey: dateKey,
         bytes: _imageBytes!,
       );
 
-      // 2) DB 저장
+      // 🔥 DB 저장
       await dailyWordService.saveDailyWord(
         date: dateKey,
         title: _titleController.text.trim(),
@@ -139,6 +139,29 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ),
         ],
       ),
+
+      // 🔥 하단 고정 저장 버튼 영역
+      bottomNavigationBar: Container(
+        color: Colors.black87,
+        padding: const EdgeInsets.all(16),
+        child: SafeArea(
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _isSaving ? null : _save,
+              icon: _isSaving
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.cloud_upload_outlined),
+              label: Text(_isSaving ? '저장 중...' : '저장'),
+            ),
+          ),
+        ),
+      ),
+
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 720),
@@ -147,6 +170,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // 날짜 & 이미지 선택
                 DatePickerRow(
                   dateLabel: dateLabel,
                   onPickDate: _pickDate,
@@ -155,6 +179,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
 
                 const SizedBox(height: 16),
+
+                // 이미지 미리보기
                 ImagePreview(bytes: _imageBytes),
 
                 const SizedBox(height: 24),
@@ -191,21 +217,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 const SizedBox(height: 12),
                 HtmlPreview(text: _descController.text),
 
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: _isSaving ? null : _save,
-                    icon: _isSaving
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.cloud_upload_outlined),
-                    label: Text(_isSaving ? '저장 중...' : '업로드 / 저장'),
-                  ),
-                ),
+                const SizedBox(height: 120), // ⬆️ 버튼 공간 확보
               ],
             ),
           ),
