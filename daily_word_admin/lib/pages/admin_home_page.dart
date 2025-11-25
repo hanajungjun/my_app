@@ -148,6 +148,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
           child: SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue,
+              ),
               onPressed: _isSaving ? null : _save,
               icon: _isSaving
                   ? const SizedBox(
@@ -167,58 +171,62 @@ class _AdminHomePageState extends State<AdminHomePage> {
           constraints: const BoxConstraints(maxWidth: 720),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 날짜 & 이미지 선택
-                DatePickerRow(
-                  dateLabel: dateLabel,
-                  onPickDate: _pickDate,
-                  onPickImage: _pickImage,
-                  imageName: _imageName,
-                ),
 
-                const SizedBox(height: 16),
+            // 🔥 탭 순서 문제 해결 핵심 추가
+            child: FocusTraversalGroup(
+              policy: OrderedTraversalPolicy(),
 
-                // 이미지 미리보기
-                ImagePreview(bytes: _imageBytes),
-
-                const SizedBox(height: 24),
-                const Text(
-                  '제목',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(hintText: '제목 입력'),
-                ),
-
-                const SizedBox(height: 24),
-                const Text(
-                  '내용',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _descController,
-                  maxLines: 10,
-                  onChanged: (_) => setState(() {}),
-                  decoration: const InputDecoration(
-                    hintText: 'HTML 사용 가능 (<pink>텍스트</pink>)',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DatePickerRow(
+                    dateLabel: dateLabel,
+                    onPickDate: _pickDate,
+                    onPickImage: _pickImage,
+                    imageName: _imageName,
                   ),
-                ),
 
-                const SizedBox(height: 24),
-                const Text(
-                  '미리보기 (HTML)',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                ),
-                const SizedBox(height: 12),
-                HtmlPreview(text: _descController.text),
+                  const SizedBox(height: 16),
+                  ImagePreview(bytes: _imageBytes),
 
-                const SizedBox(height: 120), // ⬆️ 버튼 공간 확보
-              ],
+                  const SizedBox(height: 24),
+                  const Text(
+                    '제목',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _titleController,
+                    textInputAction: TextInputAction.next, // 🔥 Tab → 다음 칸 이동
+                  ),
+
+                  const SizedBox(height: 24),
+                  const Text(
+                    '내용',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _descController,
+                    maxLines: 10,
+                    textInputAction: TextInputAction.newline,
+                    onChanged: (_) => setState(() {}),
+                    decoration: const InputDecoration(
+                      hintText: 'HTML 사용 가능 (<pink>텍스트</pink>)',
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+                  const Text(
+                    '미리보기 (HTML)',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  ),
+                  const SizedBox(height: 12),
+                  HtmlPreview(text: _descController.text),
+
+                  const SizedBox(height: 120), // 버튼 공간 확보
+                ],
+              ),
             ),
           ),
         ),
