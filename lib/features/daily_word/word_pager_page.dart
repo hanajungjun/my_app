@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:my_app/core/constants/app_colors.dart';
 import 'package:my_app/shared/styles/text_styles.dart';
 
@@ -48,13 +50,9 @@ class WordPagerPage extends StatelessWidget {
 
             // 오류
             if (snapshot.hasError) {
-              print("🔥 snapshot.error:");
-              print(snapshot.error);
               return Center(
                 child: Text(
-                  //  '데이터 불러오기 실패 🥲\n${snapshot.error}',
                   '데이터 불러오기 실패 🥲\n${snapshot.error.toString()}',
-
                   textAlign: TextAlign.center,
                   style: AppTextStyles.body,
                 ),
@@ -85,7 +83,7 @@ class WordPagerPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 20),
 
-                // 🔥 제목 (중앙 정렬)
+                // 🔥 제목 (중앙)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
@@ -116,18 +114,43 @@ class WordPagerPage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // 🔥 이미지 — 절대 안짤리고, 비율 유지 + 크기 조절
+                // 🔥 라운드 깨끗하게 — 확실히 보이도록
                 if (imageUrl != null && imageUrl.toString().isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: SizedBox(
-                        height: 400, // ✔ 이거만 조절하면 됨. 300~360 추천.
-                        child: Image.network(
-                          imageUrl,
-                          width: double.infinity,
-                          fit: BoxFit.contain, // ✔ 절대 짤리지 않음
+                      borderRadius: BorderRadius.circular(22), // 1. 외부 컨테이너 라운드
+                      child: Container(
+                        color: Colors.black26,
+                        padding: const EdgeInsets.all(8),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: ClipRRect(
+                            // 2. 추가: 이미지 자체에 라운드 적용
+                            borderRadius: BorderRadius.circular(
+                              14,
+                            ), // 외부 라운드(22)보다 작게 설정
+                            child: CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              fit: BoxFit
+                                  .cover, // Contain 대신 Cover 사용 (둥근 모서리 최적화)
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => Center(
+                                    child: CircularProgressIndicator(
+                                      value: progress.progress,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                              errorWidget: (context, url, error) => Container(
+                                alignment: Alignment.center,
+                                color: Colors.black26,
+                                child: const Icon(
+                                  Icons.error,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
