@@ -105,7 +105,7 @@ class WordPagerPage extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: MediaQuery.of(context).size.height * 0.07),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
 
                 // 🔥 본문 HTML
                 Expanded(

@@ -6,7 +6,8 @@ class AppTextStyles {
     fontFamily: 'Noto Sans',
     color: AppColors.textcolor02,
     fontSize: 45,
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w100,
+    height: 1.1,
   );
 
   static const introSub = TextStyle(
@@ -14,19 +15,22 @@ class AppTextStyles {
     color: AppColors.textcolor03,
     fontSize: 45,
     fontWeight: FontWeight.w600,
+    height: 1.1,
   );
 
   static const title = TextStyle(
     fontFamily: 'Noto Sans',
     fontSize: 48,
-    color: AppColors.textcolor02,
     fontWeight: FontWeight.w700,
+    color: AppColors.textcolor02,
+    height: 1.3,
   );
 
   static const body = TextStyle(
     fontFamily: 'Noto Sans',
     fontSize: 17,
     color: AppColors.textcolor01,
+    height: 1.3,
   );
 
   static const bodyMuted = TextStyle(
