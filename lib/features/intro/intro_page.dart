@@ -16,7 +16,7 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5000), () {
+    Timer(const Duration(seconds: 10), () {
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, WordPagerPage.routeName);
     });
