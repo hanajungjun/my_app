@@ -83,7 +83,7 @@ class WordPagerPage extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.09),
 
                 // 🔥 제목 (중앙)
                 Padding(
@@ -98,14 +98,14 @@ class WordPagerPage extends StatelessWidget {
                             0.1,
                           ), // 그림자 색상 (파란색)
                           offset: Offset(6, 6), // 그림자 위치
-                          blurRadius: 4, // 그림자 번짐 정도
+                          blurRadius: 4, // 그림자 번짐 정도R
                         ),
                       ],
                     ),
                   ),
                 ),
 
-                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.07),
 
                 // 🔥 본문 HTML
                 Expanded(
