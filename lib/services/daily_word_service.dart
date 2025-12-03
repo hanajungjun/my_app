@@ -1,10 +1,10 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:my_app/supabase/supabase.dart';
 import '../models/daily_word.dart';
 
 class DailyWordService {
-  final supabase = Supabase.instance.client;
+  final supabase = SupabaseManager.client;
 
-  /// 항상 INSERT-only (업데이트 없음)
+  /// 🔥 저장 (항상 INSERT-only)
   Future<void> saveDailyWord(DailyWord word) async {
     final normalizedDate = DailyWord.normalizeDate(word.date);
 
@@ -14,29 +14,42 @@ class DailyWordService {
     });
   }
 
-  /// 특정 날짜의 최신(updated_at) 1개만 불러오기
+  /// 🔥 오늘 단어가 없으면 → 랜덤 1개 반환
   Future<DailyWord?> getDailyWord(String date) async {
-    final normalizedDate = DailyWord.normalizeDate(date);
+    final today = DailyWord.normalizeDate(date);
 
-    final data = await supabase
+    // 1) 오늘 단어 찾기
+    final todayData = await supabase
         .from('daily_words')
         .select()
-        .eq('date', normalizedDate)
+        .eq('date', today)
         .order('updated_at', ascending: false)
         .limit(1)
         .maybeSingle();
 
-    if (data == null) return null;
-    return DailyWord.fromMap(data);
+    if (todayData != null) {
+      return DailyWord.fromMap(todayData);
+    }
+
+    // 2) 랜덤 조회
+    final all = await supabase
+        .from('daily_words')
+        .select()
+        .order('updated_at', ascending: false);
+
+    if (all.isEmpty) return null;
+
+    all.shuffle();
+    return DailyWord.fromMap(all.first);
   }
 
-  /// 전체 리스트 최신(updated_at) 순 정렬
+  /// 🔥 전체 단어 리스트 (최신순)
   Future<List<DailyWord>> getAllWords() async {
     final result = await supabase
         .from('daily_words')
         .select()
         .order('updated_at', ascending: false);
 
-    return result.map((row) => DailyWord.fromMap(row)).toList();
+    return result.map((r) => DailyWord.fromMap(r)).toList();
   }
 }

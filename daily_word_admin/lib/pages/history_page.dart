@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/daily_word_service.dart';
 import '../models/daily_word.dart';
 import 'history_detail_page.dart';
-import '../utils/date_formatter.dart'; // 🔥 포맷 가져오기
+import '../utils/date_formatter.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -31,30 +31,46 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("히스토리")),
-      body: FutureBuilder(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
         future: historyFuture,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          // 로딩 중
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final list = snapshot.data!;
+          // 에러 발생
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                "에러 발생: ${snapshot.error}",
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
+          }
 
-          if (list.isEmpty) {
+          // 데이터 없음
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text("히스토리가 없습니다"));
           }
+
+          final list = snapshot.data!;
 
           return ListView.builder(
             itemCount: list.length,
             itemBuilder: (context, i) {
               final item = list[i];
-              final updatedAt = DateTime.parse(item['updated_at']);
+
+              final updatedAtStr = item['updated_at'];
+              final updatedAt = updatedAtStr != null
+                  ? DateTime.tryParse(updatedAtStr)
+                  : null;
 
               return ListTile(
                 dense: true,
                 title: Text(item['title'] ?? ''),
                 subtitle: Text(
-                  formatDate(updatedAt), // 🔥 포맷 사용
+                  updatedAt != null ? formatDate(updatedAt) : "날짜 없음",
                   style: const TextStyle(fontSize: 13),
                 ),
                 trailing: const Icon(Icons.chevron_right),

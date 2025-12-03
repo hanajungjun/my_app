@@ -2,12 +2,11 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
-    // 여기에 Firebase 플러그인 추가
-    id("com.google.gms.google-services") // 이 플러그인 추가
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.example.my_app"
+    namespace = "com.hanajungjun.myapp1"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.my_app"
+        applicationId = "com.hanajungjun.myapp1"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -35,12 +34,6 @@ android {
     }
 }
 
-dependencies {
-    implementation("com.google.firebase:firebase-core:21.0.0")  // Firebase SDK
-    implementation("com.google.firebase:firebase-firestore:24.0.0")  // Firestore
-
-    // ... 다른 의존성들이 있으면 계속 추가
+flutter {
+    source = "../.."
 }
-
-// Firebase 플러그인 적용
-apply(plugin = "com.google.gms.google-services")

@@ -13,4 +13,4 @@ jobs:
         run: |
           curl -X POST \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}" \
-            https://rjevhsseixukhghfkozl.supabase.co/functions/v1/sendPush
+            https://uyonjhjgmwbisocdedtw.supabase.co/functions/v1/sendPush

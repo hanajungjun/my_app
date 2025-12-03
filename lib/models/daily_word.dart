@@ -1,10 +1,10 @@
 class DailyWord {
-  final String id; // uuid (DB 자동 생성)
+  final String id; // uuid
   final String date; // YYYYMMDD
   final DateTime dateTimestamp;
   final String title;
   final String description;
-  final String imageUrl;
+  final String? imageUrl; // nullable 처리
   final DateTime updatedAt;
 
   DailyWord({
@@ -17,32 +17,58 @@ class DailyWord {
     required this.updatedAt,
   });
 
-  /// 날짜 문자열 정규화
+  /// ----------------------------------------------------------------------
+  ///  🔧 날짜 문자열 정규화 (예: "2025 12 03" → "20251203")
+  /// ----------------------------------------------------------------------
   static String normalizeDate(String input) {
-    return input
+    // 공백/개행 제거
+    final cleaned = input
         .trim()
         .replaceAll('\n', '')
         .replaceAll('\r', '')
         .replaceAll(' ', '');
+
+    // YYYY-MM-DD 또는 YYYY/MM/DD → YYYYMMDD로 변환
+    final digits = cleaned.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // 최종 8자리면 성공
+    if (digits.length == 8) return digits;
+
+    // 6자리면 → 20xx 붙이기 (예: 251203 → 20251203)
+    if (digits.length == 6) return '20$digits';
+
+    return cleaned; // fallback
   }
 
+  /// ----------------------------------------------------------------------
+  ///  🔧 Map → DailyWord 변환
+  /// ----------------------------------------------------------------------
   factory DailyWord.fromMap(Map<String, dynamic> map) {
+    final rawDate = map['date']?.toString() ?? '';
+
     return DailyWord(
       id: map['id'].toString(),
-      date: normalizeDate(map['date'] ?? ''),
+      date: normalizeDate(rawDate),
+
       dateTimestamp: map['date_timestamp'] != null
           ? DateTime.parse(map['date_timestamp'])
           : DateTime.now(),
+
       title: map['title'] ?? '',
       description: map['description'] ?? '',
-      imageUrl: map['image_url'] ?? '',
+
+      // DB에서 NULL일 수 있으므로 nullable 적용
+      imageUrl: map['image_url']?.toString(),
+
       updatedAt: map['updated_at'] != null
           ? DateTime.parse(map['updated_at'])
           : DateTime.now(),
     );
   }
 
-  /// INSERT용 Map → id 포함 ❌
+  /// ----------------------------------------------------------------------
+  ///  🔧 Insert용 Map (id 제외)
+  /// ----------------------------------------------------------------------
   Map<String, dynamic> toInsertMap() {
     return {
       'date': normalizeDate(date),

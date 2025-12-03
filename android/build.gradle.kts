@@ -4,11 +4,7 @@ allprojects {
         mavenCentral()
     }
 }
-dependencies {
-        classpath("com.android.tools.build:gradle:7.0.2")  // Android Gradle 플러그인
-        classpath("com.google.gms:google-services:4.3.3")  // Google 서비스 플러그인 (Firebase와 연결)
-    }
-    
+
 val newBuildDir: Directory =
     rootProject.layout.buildDirectory
         .dir("../../build")

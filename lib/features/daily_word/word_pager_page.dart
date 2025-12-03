@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:my_app/core/constants/app_colors.dart';
 import 'package:my_app/shared/styles/text_styles.dart';
+
+import 'package:my_app/services/daily_word_service.dart';
 
 class WordPagerPage extends StatelessWidget {
   static const routeName = '/words';
@@ -18,7 +19,7 @@ class WordPagerPage extends StatelessWidget {
     return '${now.year}${two(now.month)}${two(now.day)}';
   }
 
-  /// <pink> 태그를 HTML span 으로 바꿔주기
+  /// <pink> 태그 변환
   String htmlProcessed(String raw) {
     return raw
         .replaceAll('<pb>', '<span style="color:#EA6AA3; font-weight:bold;">')
@@ -30,18 +31,13 @@ class WordPagerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final today = _todayKey();
-    final supabase = Supabase.instance.client;
+    final dailyWordService = DailyWordService(); // ⭐ 서비스 사용
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: FutureBuilder<List<Map<String, dynamic>>>(
-          future: supabase
-              .from('daily_words')
-              .select()
-              .eq('date', today)
-              .order('updated_at', ascending: false)
-              .limit(1),
+        child: FutureBuilder(
+          future: dailyWordService.getDailyWord(today),
           builder: (context, snapshot) {
             // 로딩
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -54,15 +50,15 @@ class WordPagerPage extends StatelessWidget {
             if (snapshot.hasError) {
               return Center(
                 child: Text(
-                  '데이터 불러오기 실패 🥲\n${snapshot.error.toString()}',
+                  '데이터 불러오기 실패 🥲\n${snapshot.error}',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.body,
                 ),
               );
             }
 
-            // 데이터 없음
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // 데이터 없음 (DB 자체가 비었을 때)
+            if (!snapshot.hasData || snapshot.data == null) {
               return Center(
                 child: Text(
                   '오늘의 단어가 아직 없어요.\n($today)',
@@ -72,11 +68,11 @@ class WordPagerPage extends StatelessWidget {
               );
             }
 
-            // 데이터 있음
-            final data = snapshot.data!.first;
-            final title = data['title'] ?? '제목 없음';
-            final description = data['description'] ?? '';
-            final imageUrl = data['image_url'];
+            // 단어 데이터
+            final word = snapshot.data!;
+            final title = word.title;
+            final description = word.description;
+            final imageUrl = word.imageUrl;
 
             final htmlBody = htmlProcessed(description);
 
@@ -85,7 +81,6 @@ class WordPagerPage extends StatelessWidget {
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height * 0.09),
 
-                // 🔥 제목 (중앙)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
@@ -94,11 +89,9 @@ class WordPagerPage extends StatelessWidget {
                     style: AppTextStyles.title.copyWith(
                       shadows: [
                         Shadow(
-                          color: AppColors.textcolor02.withOpacity(
-                            0.1,
-                          ), // 그림자 색상 (파란색)
-                          offset: Offset(6, 6), // 그림자 위치
-                          blurRadius: 4, // 그림자 번짐 정도R
+                          color: AppColors.textcolor02.withOpacity(0.1),
+                          offset: const Offset(6, 6),
+                          blurRadius: 4,
                         ),
                       ],
                     ),
@@ -107,7 +100,6 @@ class WordPagerPage extends StatelessWidget {
 
                 SizedBox(height: MediaQuery.of(context).size.height * 0.06),
 
-                // 🔥 본문 HTML
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -120,26 +112,21 @@ class WordPagerPage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // 🔥 라운드 깨끗하게 — 확실히 보이도록
-                if (imageUrl != null && imageUrl.toString().isNotEmpty)
+                if (imageUrl != null && imageUrl.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(22), // 1. 외부 컨테이너 라운드
+                      borderRadius: BorderRadius.circular(22),
                       child: Container(
                         color: Colors.black26,
                         padding: const EdgeInsets.all(8),
                         child: AspectRatio(
                           aspectRatio: 1,
                           child: ClipRRect(
-                            // 2. 추가: 이미지 자체에 라운드 적용
-                            borderRadius: BorderRadius.circular(
-                              14,
-                            ), // 외부 라운드(22)보다 작게 설정
+                            borderRadius: BorderRadius.circular(14),
                             child: CachedNetworkImage(
                               imageUrl: imageUrl,
-                              fit: BoxFit
-                                  .cover, // Contain 대신 Cover 사용 (둥근 모서리 최적화)
+                              fit: BoxFit.cover,
                               progressIndicatorBuilder:
                                   (context, url, progress) => Center(
                                     child: CircularProgressIndicator(
@@ -147,14 +134,8 @@ class WordPagerPage extends StatelessWidget {
                                       color: Colors.white70,
                                     ),
                                   ),
-                              errorWidget: (context, url, error) => Container(
-                                alignment: Alignment.center,
-                                color: Colors.black26,
-                                child: const Icon(
-                                  Icons.error,
-                                  color: Colors.red,
-                                ),
-                              ),
+                              errorWidget: (_, __, ___) =>
+                                  const Icon(Icons.error, color: Colors.red),
                             ),
                           ),
                         ),

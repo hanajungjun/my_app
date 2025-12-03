@@ -46,6 +46,17 @@ class _EditPageState extends State<EditPage> {
     }
   }
 
+  // ------------------------------------------------------------
+  // 🔥 date("20241130") → DateTime 변환 → timestamp 생성 함수
+  // ------------------------------------------------------------
+  String _generateTimestamp(String dateKey) {
+    final year = int.parse(dateKey.substring(0, 4));
+    final month = int.parse(dateKey.substring(4, 6));
+    final day = int.parse(dateKey.substring(6, 8));
+
+    return DateTime.utc(year, month, day).toIso8601String();
+  }
+
   Future<void> _save() async {
     String imageUrl = widget.word.imageUrl;
 
@@ -57,11 +68,15 @@ class _EditPageState extends State<EditPage> {
       );
     }
 
+    // 🔥 수정 시에도 timestamp 반드시 포함해야함
+    final timestamp = _generateTimestamp(widget.word.date);
+
     await dailyWordService.updateWord(widget.word.id, {
       'title': _titleController.text.trim(),
       'description': _descController.text.trim(),
       'image_url': imageUrl,
       'updated_at': DateTime.now().toIso8601String(),
+      'date_timestamp': timestamp, // ⭐⭐ 반드시 필요함
     });
 
     Navigator.pop(context, true);
