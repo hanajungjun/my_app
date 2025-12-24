@@ -79,7 +79,7 @@ class WordPagerPage extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.09),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.08),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -89,8 +89,8 @@ class WordPagerPage extends StatelessWidget {
                     style: AppTextStyles.title.copyWith(
                       shadows: [
                         Shadow(
-                          color: AppColors.textcolor02.withOpacity(0.1),
-                          offset: const Offset(6, 6),
+                          color: AppColors.textcolor02.withOpacity(0.05),
+                          offset: const Offset(5, 5),
                           blurRadius: 4,
                         ),
                       ],
@@ -98,11 +98,11 @@ class WordPagerPage extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Html(
                       data: htmlBody,
                       style: {"body": Style.fromTextStyle(AppTextStyles.body)},
@@ -110,16 +110,16 @@ class WordPagerPage extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
 
                 if (imageUrl != null && imageUrl.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(15),
                       child: Container(
-                        color: Colors.black26,
-                        padding: const EdgeInsets.all(8),
+                        // color: Colors.black26,
+                        // padding: const EdgeInsets.all(8),
                         child: AspectRatio(
                           aspectRatio: 1,
                           child: ClipRRect(
@@ -143,7 +143,7 @@ class WordPagerPage extends StatelessWidget {
                     ),
                   ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 0),
               ],
             );
           },

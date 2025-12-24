@@ -16,7 +16,7 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 10), () {
+    Timer(const Duration(seconds: 5), () {
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, WordPagerPage.routeName);
     });
@@ -34,10 +34,12 @@ class _IntroPageState extends State<IntroPage> {
               mainAxisAlignment: MainAxisAlignment.start, // ⭐ 글씨 위로 배치
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 60),
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(height: 70),
+
                       // 첫 번째 문장
                       const Text(
                         "나도 예전엔\n오나전 멋진",
@@ -45,7 +47,7 @@ class _IntroPageState extends State<IntroPage> {
                         style: AppTextStyles.introMain,
                       ),
 
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 5),
 
                       // 두 번째 문장 → X세대(핑크) + 였었지..(파랑)
                       RichText(
@@ -67,7 +69,7 @@ class _IntroPageState extends State<IntroPage> {
                       ),
 
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.1,
+                        height: MediaQuery.of(context).size.height * 0.11,
                       ),
 
                       // 이미지 크게 + 중앙 정렬

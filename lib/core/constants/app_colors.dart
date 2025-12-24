@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const background = Color(0xFF19150B); // 배경 색상
+  static const background = Color.fromARGB(255, 17, 14, 8); // 배경 색상
 
   static const textcolor01 = Color(0xFFFFFFFF); // 기본 텍스트 색상
   static const textcolor02 = Color(0xFF11D1EA); // 포인트 텍스트 색상1
