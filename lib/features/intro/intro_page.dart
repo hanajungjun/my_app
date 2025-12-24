@@ -52,7 +52,7 @@ class _IntroPageState extends State<IntroPage> {
                         textAlign: TextAlign.left,
                         text: TextSpan(
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: "X세대",
                               style: AppTextStyles.introSub,
                             ),
