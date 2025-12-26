@@ -87,7 +87,6 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ 로딩 중에는 아무것도 안 보여줌
     if (_loading) {
       return const Scaffold(
         backgroundColor: AppColors.background,
@@ -97,40 +96,51 @@ class _IntroPageState extends State<IntroPage> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 70),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 110),
 
-              /// ---------------- 메인 문구 ----------------
-              Html(
-                data: _titleHtml!,
-                style: _introHtmlStyle(AppTextStyles.introMain),
-              ),
+          /// ================= 텍스트 영역 =================
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 55),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// 메인 문구
+                Html(
+                  data: _titleHtml!,
+                  style: _introHtmlStyle(AppTextStyles.introMain),
+                ),
 
-              const SizedBox(height: 4), // ← Flutter Text 기준 간격
-              /// ---------------- 서브 문구 ----------------
-              Html(
-                data: _subtitleHtml!,
-                style: _introHtmlStyle(AppTextStyles.introSub),
-              ),
+                const SizedBox(height: 4),
 
-              SizedBox(height: MediaQuery.of(context).size.height * 0.11),
-
-              /// ---------------- 이미지 ----------------
-              Center(child: _buildImage(context)),
-            ],
+                /// 서브 문구
+                Html(
+                  data: _subtitleHtml!,
+                  style: _introHtmlStyle(AppTextStyles.introSub),
+                ),
+              ],
+            ),
           ),
-        ),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.07),
+
+          /// ================= 이미지 영역 =================
+          Padding(
+            // 👇 여기만 따로 조절
+            padding: const EdgeInsets.symmetric(horizontal: 25), // or 10, 20
+            child: Center(child: _buildImage(context)),
+          ),
+        ],
       ),
     );
   }
 
   /// HTML → Flutter Text 느낌으로 만드는 핵심 스타일
   Map<String, Style> _introHtmlStyle(TextStyle base) {
+    final double effectiveLineHeight = base.height ?? 1.15;
+
     return {
       'body': Style(
         margin: Margins.zero,
@@ -138,13 +148,13 @@ class _IntroPageState extends State<IntroPage> {
         fontSize: FontSize(base.fontSize ?? 16),
         fontWeight: base.fontWeight,
         color: base.color,
-        lineHeight: LineHeight(1.15), // ⭐ 줄간격 핵심
+        lineHeight: LineHeight(effectiveLineHeight), // ✅ 단일 진실 사용
         whiteSpace: WhiteSpace.normal,
       ),
       'p': Style(
         margin: Margins.zero,
         padding: HtmlPaddings.zero,
-        lineHeight: LineHeight(1.15),
+        lineHeight: LineHeight(effectiveLineHeight),
       ),
       'span': Style(margin: Margins.zero, padding: HtmlPaddings.zero),
       'br': Style(display: Display.block, margin: Margins.only(bottom: 0)),
