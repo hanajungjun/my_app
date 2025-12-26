@@ -79,7 +79,7 @@ class WordPagerPage extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -98,7 +98,7 @@ class WordPagerPage extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
 
                 Expanded(
                   child: SingleChildScrollView(
@@ -143,7 +143,27 @@ class WordPagerPage extends StatelessWidget {
                     ),
                   ),
 
-                const SizedBox(height: 0),
+                const SizedBox(height: 30),
+
+                /// ---------------- 광고 영역 ----------------
+                Container(
+                  height: 50, // ⭐ 광고 높이
+                  width: double.infinity, // ⭐ 좌우 풀
+                  color: const Color.fromARGB(
+                    255,
+                    255,
+                    70,
+                    70,
+                  ), // 테스트용 (나중에 제거)
+                  alignment: Alignment.center,
+                  child: const Text(
+                    '광고영역',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                  ),
+                ),
               ],
             );
           },
